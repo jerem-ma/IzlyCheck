@@ -19,6 +19,7 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		updateBalance();
 	}
 
 	public void clickSaveButton(View view){
@@ -62,7 +63,6 @@ public class MainActivity extends Activity {
 	}
 
 	private float getBalance(){
-		
 		return 0.0f;
 	}
 
