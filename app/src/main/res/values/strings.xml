@@ -3,4 +3,7 @@
 	<string name="login_label"> Login </string>
 	<string name="passwd_label"> Password </string>
 	<string name="save"> Save </string>
+
+	<string name="loginKey"></string>
+	<string name="passwdKey"></string>
 </resources>
