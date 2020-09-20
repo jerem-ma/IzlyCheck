@@ -9,6 +9,7 @@ import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
@@ -29,7 +30,7 @@ public class MainActivity extends Activity {
 		saveCredentials(login, passwd);
 	}
 
-	private void getCredentials(){
+	private String[] getCredentials(){
 		final SharedPreferences pref = this.getPreferences(Context.MODE_PRIVATE);
 		final String login = pref.getString(getString(R.string.loginKey), null);
 		final String passwd = pref.getString(getString(R.string.passwdKey), null);
@@ -48,6 +49,21 @@ public class MainActivity extends Activity {
 		editor.putString(getString(R.string.loginKey), login);
 		editor.putString(getString(R.string.passwdKey), passwd);
 		editor.commit();
+	}
+
+	private void updateBalance(){
+		final float balance = getBalance();
+
+		final TextView balanceView = (TextView) findViewById(R.id.balance);
+		final String defaultText = getString(R.string.balance);
+		final String balanceText = defaultText.replace("%balance%", String.valueOf(balance));
+
+		balanceView.setText(balanceText);
+	}
+
+	private float getBalance(){
+		
+		return 0.0f;
 	}
 
 }

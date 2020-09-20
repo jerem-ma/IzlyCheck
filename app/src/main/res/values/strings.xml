@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+	<string name="balance"> Balance : %balance% </string>
+
 	<string name="login_label"> Login </string>
 	<string name="passwd_label"> Password </string>
 	<string name="save"> Save </string>
 
-	<string name="loginKey"></string>
-	<string name="passwdKey"></string>
+	<string name="loginKey"> login </string>
+	<string name="passwdKey"> passwd </string>
 </resources>
