@@ -30,25 +30,12 @@ public class MainActivity extends Activity {
 		updateBalance();
 	}
 
-
 	private void setPreferences()
 	{
 		Context appContext = this.getApplicationContext();
 		pref = appContext.getSharedPreferences("IzlyCheck", Context.MODE_PRIVATE);
 	}
 
-
-
-	private void saveCredentials(@NonNull final String login, @NonNull final String passwd){
-		Validate.notNull(login);
-		Validate.notNull(passwd);
-
-		final SharedPreferences pref = this.getPreferences(Context.MODE_PRIVATE);
-		final SharedPreferences.Editor editor = pref.edit();
-		editor.putString(getString(R.string.loginKey), login);
-		editor.putString(getString(R.string.passwdKey), passwd);
-		editor.commit();
-	}
 
 	private void updateBalance(){
 		final float balance = getBalance();
@@ -72,6 +59,16 @@ public class MainActivity extends Activity {
 
 	private float getBalance(){
 		return 0.0f;
+ }
+	private void saveCredentials(@NonNull String login, @NonNull String passwd)
+	{
+		Validate.notNull(login);
+		Validate.notNull(passwd);
+
+		SharedPreferences.Editor editor = pref.edit();
+		editor.putString(getString(R.string.loginKey), login);
+		editor.putString(getString(R.string.passwdKey), passwd);
+		editor.commit();
 	}
 
 }
