@@ -4,6 +4,7 @@ import org.apache.commons.lang3.Validate;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
@@ -14,6 +15,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 public class MainActivity extends Activity {
+
+	private static SharedPreferences pref;
+
+	public static SharedPreferences getPreferences()
+	{
+		return pref;
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
@@ -29,6 +37,12 @@ public class MainActivity extends Activity {
 		final String passwd = passwdWidget.getText().toString();
 
 		saveCredentials(login, passwd);
+ }
+ 
+	private void setPreferences()
+	{
+		Context appContext = this.getApplicationContext();
+		pref = appContext.getSharedPreferences("IzlyCheck", Context.MODE_PRIVATE);
 	}
 
 	private String[] getCredentials(){
