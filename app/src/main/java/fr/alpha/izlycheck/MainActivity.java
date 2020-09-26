@@ -30,15 +30,7 @@ public class MainActivity extends Activity {
 		updateBalance();
 	}
 
-	public void clickSaveButton(View view){
-		final EditText loginWidget = (EditText) findViewById(R.id.login);
-		final EditText passwdWidget = (EditText) findViewById(R.id.passwd);
-		final String login = loginWidget.getText().toString();
-		final String passwd = passwdWidget.getText().toString();
 
-		saveCredentials(login, passwd);
- }
- 
 	private void setPreferences()
 	{
 		Context appContext = this.getApplicationContext();
@@ -66,6 +58,16 @@ public class MainActivity extends Activity {
 		final String balanceText = defaultText.replace("%balance%", String.valueOf(balance));
 
 		balanceView.setText(balanceText);
+	}
+
+	public void saveButtonClicked(View view)
+	{
+		EditText loginWidget = (EditText) findViewById(R.id.login);
+		EditText passwdWidget = (EditText) findViewById(R.id.passwd);
+		String login = loginWidget.getText().toString();
+		String passwd = passwdWidget.getText().toString();
+
+		saveCredentials(login, passwd);
 	}
 
 	private float getBalance(){
