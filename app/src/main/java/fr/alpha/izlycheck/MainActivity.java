@@ -91,7 +91,7 @@ public class MainActivity extends Activity {
 		SharedPreferences.Editor editor = pref.edit();
 		editor.putString(getString(R.string.loginKey), login);
 		editor.putString(getString(R.string.passwdKey), passwd);
-		editor.commit();
+		editor.apply();
 	}
 
 }

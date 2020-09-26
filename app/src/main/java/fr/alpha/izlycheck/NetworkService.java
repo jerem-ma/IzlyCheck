@@ -129,7 +129,7 @@ public class NetworkService extends IntentService
 		SharedPreferences pref = MainActivity.getPreferences();
 		SharedPreferences.Editor editor = pref.edit();
 		editor.putFloat("balance", balance);
-		editor.commit();
+		editor.apply();
 	}
 
 	private void logException(Exception e)
