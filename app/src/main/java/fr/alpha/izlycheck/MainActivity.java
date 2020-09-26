@@ -45,15 +45,7 @@ public class MainActivity extends Activity {
 		pref = appContext.getSharedPreferences("IzlyCheck", Context.MODE_PRIVATE);
 	}
 
-	private String[] getCredentials(){
-		final SharedPreferences pref = this.getPreferences(Context.MODE_PRIVATE);
-		final String login = pref.getString(getString(R.string.loginKey), null);
-		final String passwd = pref.getString(getString(R.string.passwdKey), null);
 
-		final String[] credentials = {login, passwd};
-		
-		return credentials;
-	}
 
 	private void saveCredentials(@NonNull final String login, @NonNull final String passwd){
 		Validate.notNull(login);
