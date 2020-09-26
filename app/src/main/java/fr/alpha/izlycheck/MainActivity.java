@@ -24,11 +24,14 @@ public class MainActivity extends Activity {
 	}
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState){
+	protected void onCreate(Bundle savedInstanceState)
+	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		updateBalance();
+
 		setPreferences();
+		startNetworkService();
+		refreshBalance();
 	}
 
 	private void setPreferences()
@@ -37,14 +40,37 @@ public class MainActivity extends Activity {
 		pref = appContext.getSharedPreferences("IzlyCheck", Context.MODE_PRIVATE);
 	}
 
-	private void updateBalance(){
-		final float balance = getBalance();
+	private void startNetworkService()
+	{
+		Intent intent = new Intent(this, NetworkService.class);
+		startService(intent);
+	}
 
-		final TextView balanceView = (TextView) findViewById(R.id.balance);
-		final String defaultText = getString(R.string.balance);
-		final String balanceText = defaultText.replace("%balance%", String.valueOf(balance));
+	private void refreshBalance()
+	{
+		float balance = getBalance();
+		setBalanceDisplayTo(balance);
+	}
 
-		balanceView.setText(balanceText);
+	private float getBalance()
+	{
+		return pref.getFloat("balance", 0.0f);
+	}
+
+	private void setBalanceDisplayTo(float balance)
+	{
+		TextView balanceView = (TextView) findViewById(R.id.balance);
+		String balanceDisplay = formatBalanceDisplay(balance);
+		balanceView.setText(balanceDisplay);
+	}
+
+	private String formatBalanceDisplay( float balance)
+	{
+		String defaultText = getString(R.string.balance);
+		String balanceString = String.valueOf(balance);
+		String formatedBalance = defaultText.replace("%balance%", balanceString);
+
+		return formatedBalance;
 	}
 
 	public void saveButtonClicked(View view)
@@ -56,10 +82,6 @@ public class MainActivity extends Activity {
 
 		saveCredentials(login, passwd);
 	}
-
-	private float getBalance(){
-		return 0.0f;
- }
 
 	private void saveCredentials(@NonNull String login, @NonNull String passwd)
 	{
