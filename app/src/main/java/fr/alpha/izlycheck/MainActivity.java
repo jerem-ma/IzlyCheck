@@ -28,6 +28,7 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		updateBalance();
+		setPreferences();
 	}
 
 	private void setPreferences()
@@ -35,7 +36,6 @@ public class MainActivity extends Activity {
 		Context appContext = this.getApplicationContext();
 		pref = appContext.getSharedPreferences("IzlyCheck", Context.MODE_PRIVATE);
 	}
-
 
 	private void updateBalance(){
 		final float balance = getBalance();
@@ -60,6 +60,7 @@ public class MainActivity extends Activity {
 	private float getBalance(){
 		return 0.0f;
  }
+
 	private void saveCredentials(@NonNull String login, @NonNull String passwd)
 	{
 		Validate.notNull(login);
