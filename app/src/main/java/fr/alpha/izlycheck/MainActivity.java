@@ -14,8 +14,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-public class MainActivity extends Activity {
-
+public class MainActivity extends Activity
+{
 	private static SharedPreferences pref;
 
 	public static SharedPreferences getPreferences()

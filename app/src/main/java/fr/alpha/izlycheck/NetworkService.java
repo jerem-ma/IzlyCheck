@@ -37,16 +37,7 @@ public class NetworkService extends IntentService
 
 	private Runnable getBalanceUpdater()
 	{
-		Runnable task = new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				updateBalance();
-			}
-		};
-
-		return task;
+		return this::updateBalance;
 	}
 
 	private void updateBalance()

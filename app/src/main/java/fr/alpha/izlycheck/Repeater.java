@@ -2,20 +2,24 @@ package fr.alpha.izlycheck;
 
 import android.os.Handler;
 
-public class Repeater{
-
+public class Repeater
+{
 	private static final Handler handler = new Handler();
 
 	private final Runnable repeatingTask;
 
-	public Repeater(Runnable task, long delay){
+	public Repeater(Runnable task, long delay)
+	{
 		repeatingTask = addAutoCallbackToTask(task, delay);
 	}
 
-	private Runnable addAutoCallbackToTask(Runnable task, long delay){
-		Runnable repeatingTask = new Runnable(){
+	private Runnable addAutoCallbackToTask(Runnable task, long delay)
+	{
+		Runnable repeatingTask = new Runnable()
+		{
 			@Override
-			public void run(){
+			public void run()
+			{
 				handler.post(task);
 				handler.postDelayed(this, delay);
 			}
@@ -24,7 +28,8 @@ public class Repeater{
 		return repeatingTask;
 	}
 
-	public void start(){
+	public void start()
+	{
 		handler.post(repeatingTask);
 	}
 

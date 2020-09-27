@@ -13,8 +13,8 @@ import java.net.URL;
 import java.util.Map;
 import java.util.Map.Entry;
 
-public class EasyHttpURLConnection{
-
+public class EasyHttpURLConnection
+{
 	private static boolean isCookieManagerSet = false;
 
 	private final HttpURLConnection connection;
@@ -23,7 +23,8 @@ public class EasyHttpURLConnection{
 	private boolean hasStarted;
 	private String page;
 
-	static{
+	static
+	{
 		CookieHandler.setDefault(new CookieManager());
 	}
 
@@ -39,19 +40,22 @@ public class EasyHttpURLConnection{
 		this.hasStarted = false;
 	}
 
-	public String getPage() throws IOException{
+	public String getPage() throws IOException
+	{
 		if (!this.hasStarted)
 			connect();
 
 		return this.page;
 	}
 
-	public void disconnect(){
+	public void disconnect()
+	{
 		if (this.hasStarted)
 			this.connection.disconnect();
 	}
 
-	private void connect() throws IOException{
+	private void connect() throws IOException
+	{
 		this.hasStarted = true;
 		if (hasData())
 			postData();
@@ -59,11 +63,13 @@ public class EasyHttpURLConnection{
 		readPage();
 	}
 
-	private boolean hasData(){
+	private boolean hasData()
+	{
 		return data != null && !data.isEmpty();
 	}
 
-	private void postData() throws IOException{
+	private void postData() throws IOException
+	{
 		this.connection.setDoOutput(true);
 		OutputStream output = connection.getOutputStream();
 		DataOutputStream dataOutputStream = new DataOutputStream(output);
@@ -73,9 +79,11 @@ public class EasyHttpURLConnection{
 		dataOutputStream.close();
 	}
 
-	private String formatDataForURL(){
+	private String formatDataForURL()
+	{
 		StringBuilder formatedDataBuilder = new StringBuilder();
-		for (Entry<String, String> parameter : data.entrySet()){
+		for (Entry<String, String> parameter : data.entrySet())
+		{
 			String formatedParameter = formatParameterForURL(parameter);
 			formatedDataBuilder.append(formatedParameter);
 			formatedDataBuilder.append("&");
@@ -87,7 +95,8 @@ public class EasyHttpURLConnection{
 		return formatedDataBuilder.toString();
 	}
 
-	private String formatParameterForURL(Entry<String, String> parameter){
+	private String formatParameterForURL(Entry<String, String> parameter)
+	{
 		String key = parameter.getKey();
 		String value = parameter.getValue();
 		String formatedParameter = key + "=" + value;
@@ -95,7 +104,8 @@ public class EasyHttpURLConnection{
 		return formatedParameter;
 	} 
 
-	private void readPage() throws IOException{
+	private void readPage() throws IOException
+	{
 			InputStream inputStream = this.connection.getInputStream();
 			this.page = readInputStream(inputStream);
 
@@ -103,12 +113,14 @@ public class EasyHttpURLConnection{
 	}
 
 	private String readInputStream(InputStream inputStream)
-		throws UnsupportedEncodingException, IOException{
+		throws UnsupportedEncodingException, IOException
+	{
 			ByteArrayOutputStream result = new ByteArrayOutputStream();
 			byte[] buffer = new byte[1024];
 			int length;
 
-			while ((length = inputStream.read(buffer)) != -1){
+			while ((length = inputStream.read(buffer)) != -1)
+			{
 				result.write(buffer, 0, length);
 			}
 
