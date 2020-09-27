@@ -8,6 +8,13 @@
 	tools:context=".MainActivity">
 
 	<TextView
+		android:id="@+id/balance"
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		app:layout_constraintTop_toTopOf="parent"
+		app:layout_constraintRight_toRightOf="parent" />
+
+	<TextView
 		android:id="@+id/login_label"
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
@@ -61,6 +68,6 @@
 		app:layout_constraintLeft_toLeftOf="parent"
 		app:layout_constraintRight_toRightOf="parent"
 		android:text="@string/save"
-		android:onClick="clickSaveButton" />
+		android:onClick="saveButtonClicked" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
