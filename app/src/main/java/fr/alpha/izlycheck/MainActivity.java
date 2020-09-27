@@ -64,7 +64,7 @@ public class MainActivity extends Activity
 		balanceView.setText(balanceDisplay);
 	}
 
-	private String formatBalanceDisplay( float balance)
+	private String formatBalanceDisplay(float balance)
 	{
 		String defaultText = getString(R.string.balance);
 		String balanceString = String.valueOf(balance);
