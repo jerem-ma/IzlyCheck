@@ -48,13 +48,8 @@ public class MainActivity extends Activity
 
 	private void refreshBalance()
 	{
-		float balance = getBalance();
+		float balance = Balance.getSavedBalance();
 		setBalanceDisplayTo(balance);
-	}
-
-	private float getBalance()
-	{
-		return pref.getFloat("balance", 0.0f);
 	}
 
 	private void setBalanceDisplayTo(float balance)
