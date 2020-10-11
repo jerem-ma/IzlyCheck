@@ -1,6 +1,5 @@
 package fr.alpha.izlycheck;
 
-import java.io.IOException;
 import java.util.regex.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,14 +26,14 @@ public class Balance
 	}
 
 	public void updateBalance()
-		throws BalanceNotFoundInPageException, IOException
+		throws BalanceNotFoundInPageException, ConnectionFailedException
 	{
 		float balance = getBalance();
 		saveBalanceInPreferences(balance);
 	}
 
 	private float getBalance()
-		throws IOException, BalanceNotFoundInPageException
+		throws ConnectionFailedException, BalanceNotFoundInPageException
 	{
 		String page = getIzlyPage();
 		float balance = extractBalanceFromPage(page);
@@ -42,7 +41,7 @@ public class Balance
 		return balance;
 	}
 
-	private String getIzlyPage() throws IOException
+	private String getIzlyPage() throws ConnectionFailedException
 	{
 		String websiteLink = "https://mon-espace.izly.fr/Home/Logon";
 		Map<String, String> credentials = getData();

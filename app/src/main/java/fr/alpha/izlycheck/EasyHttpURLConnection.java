@@ -9,6 +9,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -17,9 +18,10 @@ public class EasyHttpURLConnection
 {
 	private static boolean isCookieManagerSet = false;
 
-	private final HttpURLConnection connection;
-	private final Map<String, String> data;
+	private Map<String, String> data;
+	private URL url;
 
+	private HttpURLConnection connection;
 	private boolean hasStarted;
 	private String page;
 
@@ -28,19 +30,29 @@ public class EasyHttpURLConnection
 		CookieHandler.setDefault(new CookieManager());
 	}
 
-	public EasyHttpURLConnection(
-		String websiteLink,
-		Map<String, String> data
-	) throws IOException
+	public EasyHttpURLConnection(String websiteLink, Map<String, String> data)
+		throws ConnectionFailedException
 	{
-		URL url = new URL(websiteLink);
+		try
+		{
+			tryToInstanciate(websiteLink, data);
+		}
+		catch (MalformedURLException e)
+		{
+			throw new ConnectionFailedException(e);
+		}
+	}
 
-		this.connection = (HttpURLConnection) url.openConnection();
+	private void tryToInstanciate(String websiteLink, Map<String, String> data)
+		throws MalformedURLException
+	{
+		this.url = new URL(websiteLink);
+
 		this.data = data;
 		this.hasStarted = false;
 	}
 
-	public String getPage() throws IOException
+	public String getPage() throws ConnectionFailedException
 	{
 		if (!this.hasStarted)
 			connect();
@@ -54,9 +66,22 @@ public class EasyHttpURLConnection
 			this.connection.disconnect();
 	}
 
-	private void connect() throws IOException
+	private void connect() throws ConnectionFailedException
+	{
+		try
+		{
+			tryToConnect();
+		}
+		catch (IOException e)
+		{
+			throw new ConnectionFailedException(e);
+		}
+	}
+
+	private void tryToConnect() throws IOException
 	{
 		this.hasStarted = true;
+		this.connection = (HttpURLConnection) url.openConnection();
 		if (hasData())
 			postData();
 
@@ -73,10 +98,15 @@ public class EasyHttpURLConnection
 		this.connection.setDoOutput(true);
 		OutputStream output = connection.getOutputStream();
 		DataOutputStream dataOutputStream = new DataOutputStream(output);
-
 		String formatedData = formatDataForURL();
-		dataOutputStream.writeBytes(formatedData);
-		dataOutputStream.close();
+		try
+		{
+			dataOutputStream.writeBytes(formatedData);
+		}
+		finally
+		{
+			output.close();
+		}
 	}
 
 	private String formatDataForURL()
@@ -106,24 +136,28 @@ public class EasyHttpURLConnection
 
 	private void readPage() throws IOException
 	{
-			InputStream inputStream = this.connection.getInputStream();
+		InputStream inputStream = this.connection.getInputStream();
+		try
+		{
 			this.page = readInputStream(inputStream);
-
+		}
+		finally
+		{
 			inputStream.close();
+		}
 	}
 
-	private String readInputStream(InputStream inputStream)
-		throws UnsupportedEncodingException, IOException
+	private String readInputStream(InputStream inputStream) throws IOException
 	{
-			ByteArrayOutputStream result = new ByteArrayOutputStream();
-			byte[] buffer = new byte[1024];
-			int length;
+		ByteArrayOutputStream result = new ByteArrayOutputStream();
+		byte[] buffer = new byte[1024];
+		int length;
 
-			while ((length = inputStream.read(buffer)) != -1)
-			{
-				result.write(buffer, 0, length);
-			}
+		while ((length = inputStream.read(buffer)) != -1)
+		{
+			result.write(buffer, 0, length);
+		}
 
-			return result.toString("UTF-8");
+		return result.toString("UTF-8");
 	}
 }

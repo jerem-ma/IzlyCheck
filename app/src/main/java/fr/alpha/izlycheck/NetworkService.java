@@ -1,6 +1,5 @@
 package fr.alpha.izlycheck;
 
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
@@ -41,14 +40,14 @@ public class NetworkService extends IntentService
 		{
 			tryToUpdateBalance();
 		}
-		catch (BalanceNotFoundInPageException | IOException e)
+		catch (BalanceNotFoundInPageException | ConnectionFailedException e)
 		{
 			logException(e);
 		}
 	}
 
 	private void tryToUpdateBalance()
-		throws BalanceNotFoundInPageException, IOException
+		throws BalanceNotFoundInPageException, ConnectionFailedException
 	{
 		String login = Credentials.getLogin(this);
 		String password = Credentials.getPassword(this);
