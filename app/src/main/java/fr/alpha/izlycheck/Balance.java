@@ -7,6 +7,8 @@ import java.util.Map;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
+import org.greenrobot.eventbus.EventBus;
+
 public class Balance
 {
 	private final String login;
@@ -30,6 +32,7 @@ public class Balance
 	{
 		float balance = getBalance();
 		saveBalanceInPreferences(balance);
+		EventBus.getDefault().post(new BalanceUpdateEvent());
 	}
 
 	private float getBalance()

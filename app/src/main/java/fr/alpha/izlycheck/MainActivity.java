@@ -14,6 +14,9 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 public class MainActivity extends Activity
 {
 	private static SharedPreferences pref;
@@ -31,6 +34,26 @@ public class MainActivity extends Activity
 
 		setPreferences();
 		startNetworkService();
+		refreshBalance();
+	}
+
+	@Override
+	protected void onStart()
+	{
+		super.onStart();
+		EventBus.getDefault().register(this);
+	}
+
+	@Override
+	protected void onStop()
+	{
+		EventBus.getDefault().unregister(this);
+		super.onStop();
+	}
+
+	@Subscribe
+	public void onBalanceUpdate(BalanceUpdateEvent e)
+	{
 		refreshBalance();
 	}
 
@@ -54,9 +77,15 @@ public class MainActivity extends Activity
 
 	private void setBalanceDisplayTo(float balance)
 	{
-		TextView balanceView = (TextView) findViewById(R.id.balance);
-		String balanceDisplay = formatBalanceDisplay(balance);
-		balanceView.setText(balanceDisplay);
+		this.runOnUiThread(new Runnable()
+		{
+			public void run()
+			{
+				TextView balanceView = (TextView) findViewById(R.id.balance);
+				String balanceDisplay = formatBalanceDisplay(balance);
+				balanceView.setText(balanceDisplay);
+			}
+		});
 	}
 
 	private String formatBalanceDisplay(float balance)
