@@ -32,6 +32,9 @@ public class Balance
 		this.password = password;
 	}
 
+	/**
+	 * Do not call this method in the MainActivity
+	 */
 	public void updateBalanceAndLogErrors()
 	{
 		try
@@ -44,6 +47,9 @@ public class Balance
 		}
 	}
 
+	/**
+	 * Do not call this method in the MainActivity
+	 */
 	public void updateBalance()
 		throws BalanceNotFoundInPageException, ConnectionFailedException
 	{
