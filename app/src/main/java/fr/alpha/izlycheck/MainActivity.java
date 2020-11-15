@@ -30,6 +30,8 @@ public class MainActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+		registerEvents();
+
 		setContentView(R.layout.activity_main);
 
 		setPreferences();
@@ -49,6 +51,12 @@ public class MainActivity extends Activity
 	{
 		EventBus.getDefault().unregister(this);
 		super.onStop();
+	}
+
+	private void registerEvents()
+	{
+		Events.registerEvent("balanceUpdateAsked", new EventBus());
+		Events.registerEvent("balanceUpdated", new EventBus());
 	}
 
 	@Subscribe
