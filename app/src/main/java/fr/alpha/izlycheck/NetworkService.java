@@ -1,11 +1,7 @@
 package fr.alpha.izlycheck;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-
 import android.app.IntentService;
 import android.content.Intent;
-import android.util.Log;
 
 public class NetworkService extends IntentService
 {
@@ -31,37 +27,10 @@ public class NetworkService extends IntentService
 
 	private Runnable getBalanceUpdater()
 	{
-		return this::updateBalance;
-	}
-
-	private void updateBalance()
-	{
-		try
-		{
-			tryToUpdateBalance();
-		}
-		catch (BalanceNotFoundInPageException | ConnectionFailedException e)
-		{
-			logException(e);
-		}
-	}
-
-	private void tryToUpdateBalance()
-		throws BalanceNotFoundInPageException, ConnectionFailedException
-	{
 		String login = Credentials.getLogin(this);
 		String password = Credentials.getPassword(this);
 
-		Balance balanceUpdater = new Balance(login, password);
-		balanceUpdater.updateBalance();
+		Balance updater = new Balance(login, password);
+		return updater::updateBalanceAndLogErrors;
 	}
-
-
-	private void logException(Exception e)
-	{
-		StringWriter stackTrace = new StringWriter();
-		e.printStackTrace(new PrintWriter(stackTrace));
-		Log.e(LOG_TAG, stackTrace.toString());
-	}
-
 }

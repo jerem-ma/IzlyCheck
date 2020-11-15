@@ -1,16 +1,21 @@
 package fr.alpha.izlycheck;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.regex.*;
 import java.util.HashMap;
 import java.util.Map;
 
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.util.Log;
 
 import org.greenrobot.eventbus.EventBus;
 
 public class Balance
 {
+	private static final String LOG_TAG = "IzlyCheck";
+
 	private final String login;
 	private final String password;
 
@@ -25,6 +30,18 @@ public class Balance
 	{
 		this.login = login;
 		this.password = password;
+	}
+
+	public void updateBalanceAndLogErrors()
+	{
+		try
+		{
+			updateBalance();
+		}
+		catch (BalanceNotFoundInPageException | ConnectionFailedException e)
+		{
+			logException(e);
+		}
 	}
 
 	public void updateBalance()
@@ -94,4 +111,10 @@ public class Balance
 		return balance;
 	}
 
+	private void logException(Exception e)
+	{
+		StringWriter stackTrace = new StringWriter();
+		e.printStackTrace(new PrintWriter(stackTrace));
+		Log.e(LOG_TAG, stackTrace.toString());
+	}
 }
