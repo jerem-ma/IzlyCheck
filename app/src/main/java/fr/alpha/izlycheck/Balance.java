@@ -10,8 +10,6 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.util.Log;
 
-import org.greenrobot.eventbus.EventBus;
-
 public class Balance
 {
 	private static final String LOG_TAG = "IzlyCheck";
@@ -55,7 +53,7 @@ public class Balance
 	{
 		float balance = getBalance();
 		saveBalanceInPreferences(balance);
-		EventBus.getDefault().post(new BalanceUpdateEvent());
+		Events.getEvent("balanceUpdated").post(new BalanceUpdateEvent());
 	}
 
 	private float getBalance()

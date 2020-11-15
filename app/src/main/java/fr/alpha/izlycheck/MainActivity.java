@@ -43,13 +43,13 @@ public class MainActivity extends Activity
 	protected void onStart()
 	{
 		super.onStart();
-		EventBus.getDefault().register(this);
+		Events.getEvent("balanceUpdated").register(this);
 	}
 
 	@Override
 	protected void onStop()
 	{
-		EventBus.getDefault().unregister(this);
+		Events.getEvent("balanceUpdated").unregister(this);
 		super.onStop();
 	}
 
@@ -113,6 +113,7 @@ public class MainActivity extends Activity
 		String passwd = passwdWidget.getText().toString();
 
 		saveCredentials(login, passwd);
+		Events.getEvent("balanceUpdateAsked").post(new BalanceUpdateEvent());
 	}
 
 	private void saveCredentials(@NonNull String login, @NonNull String passwd)
