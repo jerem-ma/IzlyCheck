@@ -35,7 +35,7 @@ public class MainActivity extends Activity
 		setContentView(R.layout.activity_main);
 
 		setPreferences();
-		startNetworkService();
+		updateBalanceFrequently();
 		refreshBalance();
 	}
 
@@ -71,9 +71,9 @@ public class MainActivity extends Activity
 		pref = appContext.getSharedPreferences("IzlyCheck", Context.MODE_PRIVATE);
 	}
 
-	private void startNetworkService()
+	private void updateBalanceFrequently()
 	{
-		Intent intent = new Intent(this, NetworkService.class);
+		Intent intent = new Intent(this, UpdateBalanceService.class);
 		startService(intent);
 	}
 

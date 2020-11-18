@@ -3,13 +3,13 @@ package fr.alpha.izlycheck;
 import android.app.IntentService;
 import android.content.Intent;
 
-public class NetworkService extends IntentService
+public class UpdateBalanceService extends IntentService
 {
 	private static final String LOG_TAG = "IzlyCheck";
 
-	public NetworkService()
+	public UpdateBalanceService()
 	{
-		super("NetworkService");
+		super("UpdateBalanceService");
 	}
 
 	@Override
