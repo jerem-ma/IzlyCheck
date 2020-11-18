@@ -13,22 +13,15 @@ public class UpdateBalanceService extends IntentService
 	@Override
 	protected void onHandleIntent(Intent intent)
 	{
-		updateBalanceFrequently();
+		updateBalance();
 	}
 
-	private void updateBalanceFrequently()
-	{
-		Runnable balanceUpdater = getBalanceUpdater();
-		Repeater updaterLoop = new Repeater(balanceUpdater, 60*60*1000);
-		updaterLoop.start();
-	}
-
-	private Runnable getBalanceUpdater()
+	private void updateBalance()
 	{
 		String login = Credentials.getLogin(this);
 		String password = Credentials.getPassword(this);
 
 		Balance updater = new Balance(login, password);
-		return updater::updateBalanceAndLogErrors;
+		updater.updateBalanceAndLogErrors();
 	}
 }

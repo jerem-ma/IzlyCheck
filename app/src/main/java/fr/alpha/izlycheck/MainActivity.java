@@ -3,6 +3,8 @@ package fr.alpha.izlycheck;
 import org.apache.commons.lang3.Validate;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -55,7 +57,6 @@ public class MainActivity extends Activity
 
 	private void registerEvents()
 	{
-		Events.registerEvent("balanceUpdateAsked", new EventBus());
 		Events.registerEvent("balanceUpdated", new EventBus());
 	}
 
@@ -74,7 +75,22 @@ public class MainActivity extends Activity
 	private void updateBalanceFrequently()
 	{
 		Intent intent = new Intent(this, UpdateBalanceService.class);
-		startService(intent);
+		PendingIntent pendingIntent = PendingIntent.getService(
+			this,
+			0,
+			intent,
+			PendingIntent.FLAG_CANCEL_CURRENT
+		);
+
+		AlarmManager alarms =
+			(AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+
+		alarms.setRepeating(
+			AlarmManager.RTC,
+			System.currentTimeMillis(),
+			AlarmManager.INTERVAL_DAY,
+			pendingIntent
+		);
 	}
 
 	private void refreshBalance()
@@ -85,15 +101,9 @@ public class MainActivity extends Activity
 
 	private void setBalanceDisplayTo(float balance)
 	{
-		this.runOnUiThread(new Runnable()
-		{
-			public void run()
-			{
-				TextView balanceView = (TextView) findViewById(R.id.balance);
-				String balanceDisplay = formatBalanceDisplay(balance);
-				balanceView.setText(balanceDisplay);
-			}
-		});
+		TextView balanceView = (TextView) findViewById(R.id.balance);
+		String balanceDisplay = formatBalanceDisplay(balance);
+		balanceView.setText(balanceDisplay);
 	}
 
 	private String formatBalanceDisplay(float balance)
@@ -113,7 +123,7 @@ public class MainActivity extends Activity
 		String passwd = passwdWidget.getText().toString();
 
 		saveCredentials(login, passwd);
-		Events.getEvent("balanceUpdateAsked").post(new BalanceUpdateEvent());
+		askBalanceUpdate();
 	}
 
 	private void saveCredentials(@NonNull String login, @NonNull String passwd)
@@ -127,4 +137,9 @@ public class MainActivity extends Activity
 		editor.apply();
 	}
 
+	private void askBalanceUpdate()
+	{
+		Intent intent = new Intent(this, UpdateBalanceService.class);
+		startService(intent);
+	}
 }
