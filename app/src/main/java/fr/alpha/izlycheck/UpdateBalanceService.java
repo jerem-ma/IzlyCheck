@@ -5,8 +5,6 @@ import android.content.Intent;
 
 public class UpdateBalanceService extends IntentService
 {
-	private static final String LOG_TAG = "IzlyCheck";
-
 	public UpdateBalanceService()
 	{
 		super("UpdateBalanceService");
