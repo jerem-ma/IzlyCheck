@@ -3,6 +3,8 @@ package fr.alpha.izlycheck;
 import org.apache.commons.lang3.Validate;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -30,10 +32,12 @@ public class MainActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+		registerEvents();
+
 		setContentView(R.layout.activity_main);
 
 		setPreferences();
-		startNetworkService();
+		updateBalanceFrequently();
 		refreshBalance();
 	}
 
@@ -41,14 +45,19 @@ public class MainActivity extends Activity
 	protected void onStart()
 	{
 		super.onStart();
-		EventBus.getDefault().register(this);
+		Events.getEvent("balanceUpdated").register(this);
 	}
 
 	@Override
 	protected void onStop()
 	{
-		EventBus.getDefault().unregister(this);
+		Events.getEvent("balanceUpdated").unregister(this);
 		super.onStop();
+	}
+
+	private void registerEvents()
+	{
+		Events.registerEvent("balanceUpdated", new EventBus());
 	}
 
 	@Subscribe
@@ -63,10 +72,25 @@ public class MainActivity extends Activity
 		pref = appContext.getSharedPreferences("IzlyCheck", Context.MODE_PRIVATE);
 	}
 
-	private void startNetworkService()
+	private void updateBalanceFrequently()
 	{
-		Intent intent = new Intent(this, NetworkService.class);
-		startService(intent);
+		Intent intent = new Intent(this, UpdateBalanceService.class);
+		PendingIntent pendingIntent = PendingIntent.getService(
+			this,
+			0,
+			intent,
+			PendingIntent.FLAG_CANCEL_CURRENT
+		);
+
+		AlarmManager alarms =
+			(AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+
+		alarms.setRepeating(
+			AlarmManager.RTC,
+			System.currentTimeMillis(),
+			AlarmManager.INTERVAL_DAY,
+			pendingIntent
+		);
 	}
 
 	private void refreshBalance()
@@ -77,15 +101,9 @@ public class MainActivity extends Activity
 
 	private void setBalanceDisplayTo(float balance)
 	{
-		this.runOnUiThread(new Runnable()
-		{
-			public void run()
-			{
-				TextView balanceView = (TextView) findViewById(R.id.balance);
-				String balanceDisplay = formatBalanceDisplay(balance);
-				balanceView.setText(balanceDisplay);
-			}
-		});
+		TextView balanceView = (TextView) findViewById(R.id.balance);
+		String balanceDisplay = formatBalanceDisplay(balance);
+		balanceView.setText(balanceDisplay);
 	}
 
 	private String formatBalanceDisplay(float balance)
@@ -105,6 +123,7 @@ public class MainActivity extends Activity
 		String passwd = passwdWidget.getText().toString();
 
 		saveCredentials(login, passwd);
+		askBalanceUpdate();
 	}
 
 	private void saveCredentials(@NonNull String login, @NonNull String passwd)
@@ -118,4 +137,9 @@ public class MainActivity extends Activity
 		editor.apply();
 	}
 
+	private void askBalanceUpdate()
+	{
+		Intent intent = new Intent(this, UpdateBalanceService.class);
+		startService(intent);
+	}
 }
