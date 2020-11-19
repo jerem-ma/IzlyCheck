@@ -16,7 +16,7 @@
 			</intent-filter>
 		</activity>
 
-		<service android:name=".NetworkService">
+		<service android:name=".UpdateBalanceService">
 		</service>
 	</application>
 
