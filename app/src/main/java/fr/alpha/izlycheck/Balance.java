@@ -52,8 +52,13 @@ public class Balance
 		throws BalanceNotFoundInPageException, ConnectionFailedException
 	{
 		float balance = getBalance();
-		saveBalanceInPreferences(balance);
-		Events.getEvent("balanceUpdated").post(new BalanceUpdateEvent());
+		float oldBalance = getSavedBalance();
+
+		if (oldBalance != balance)
+		{
+			saveBalanceInPreferences(balance);
+			Events.getEvent("balanceUpdated").post(new BalanceUpdateEvent());
+		}
 	}
 
 	private float getBalance()
